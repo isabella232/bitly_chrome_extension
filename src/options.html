@@ -112,7 +112,7 @@
                     </div>
                     
 
-                    <div id="api_domains">
+<!--                    <div id="api_domains">
                         
                         <div class="api_type_selector options_container">
                         <h3>API Domains</h3>
@@ -135,8 +135,8 @@
 
                             
                             </form>
-                        </div>
-                    </div>                    
+                        </div> 
+                    </div>     -->               
 
                     
                 
@@ -533,7 +533,7 @@
                     var domain_elem = _id("api_domains")
                     header.innerText = user_data.x_login + " Settings";
                     chrome.extension.sendRequest( {'action' : 'share_accounts' }, list_accounts_callback );
-                    api_domains_elem.style.display="block";
+                    //api_domains_elem.style.display="block";
                     _id("auto_expand_container").style.display="block";
                     
                     if( bg.get_url_expansion() ) {
@@ -555,7 +555,7 @@
                     } else {
                         auto_copy_elem.checked=false;
                     }
-                    set_api_radio_button();
+                    //set_api_radio_button();
                     
                     if( note_prefs ) {
                         console.log(note_prefs, "hrm")
@@ -696,12 +696,12 @@
                     _q('.notificationInnerContainer').style.display=shown;                    
                 });
                 
-                api_form_elem.addEventListener('change', function(e) {
-                    //e.target,
-                    if(e.target.type !== "radio") { return; }
-                    //console.log(e, "api form changed", e.target.nodeName, e.target.type, e.target.value)
-                    bg.set_api_domain( e.target.value  )
-                })
+//                api_form_elem.addEventListener('change', function(e) {
+//                    //e.target,
+//                    if(e.target.type !== "radio") { return; }
+//                    //console.log(e, "api form changed", e.target.nodeName, e.target.type, e.target.value)
+//                    bg.set_api_domain( e.target.value  )
+//                })
                 
                 bod.addEventListener('click', function(e) {
                     

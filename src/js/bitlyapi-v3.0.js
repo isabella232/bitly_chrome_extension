@@ -71,6 +71,8 @@ BitApi.prototype = {
         var params = extend({}, this.bit_request, { 'longUrl' : long_url } );
         delete params.access_token
         this.count+=1;
+        delete params.domain; // quick fix hack
+        
         bitlyRequest( host + urls.shorten, params, callback);
     },
     
