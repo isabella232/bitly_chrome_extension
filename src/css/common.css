@@ -135,7 +135,7 @@
     line-height:1em;
 }
 .ext_nav_list li:first-child {
-    border-right:1px solid #efefef;
+/*    border-right:1px solid #efefef; */
     
     padding-left:10px;
 
@@ -147,6 +147,7 @@ body.page_loaded #blueBanner {
     height:0px;
     background:#6BAFF0;
     position:fixed;
+    z-index:100;
     top:0;
     width:100%;
     -webkit-box-shadow:0 4px 4px #D9D9D9;

@@ -1,12 +1,15 @@
 /*
     html5 workers
 
+    time is in milliseconds for all timers
 */
 
 
 
-var ssl_key, black_list=[], ajax_in_action,  timer;
+var ssl_key, black_list=[], ajax_in_action,  timer, timer2,
+    counter=0;
 onmessage = function(evt) {
+
 
     if( evt.data.action === "start") {
         
@@ -45,7 +48,13 @@ function handle_api_repsonses(jo) {
         postMessage(jo);
     }
     
-    timer = setTimeout(callRemote, 28000);
+
+    if(!navigator.onLine) { 
+        //postMessage({"error": "Not on line"}); 
+        return; 
+    }
+    
+    timer = setTimeout(callRemote, 2000);
 
 }
 
@@ -56,11 +65,17 @@ function callRemote(){
     
     if(timer) {
         clearTimeout(timer);
+        clearTimeout(timer2);
     }
     
-    setTimeout(function() {
+    if(!navigator.onLine) { 
+        //postMessage({"error": "Not on line"}); 
+        return; 
+    }
+
+    timer2=setTimeout(function() {
         ajax_in_action = ajaxRequest( ssl_key, handle_api_repsonses );          
-    }, 26000);
+    }, 15000);
 
    
 }
@@ -90,6 +105,7 @@ function process_realtime( data  ) {
     
     
     return {
+        'online': navigator.onLine,
         'notifications' : notifications,
         'trending_links' : data,
         'current_blacklist' : black_list
@@ -100,7 +116,7 @@ function process_realtime( data  ) {
 
 function ajaxRequest( oauth_key, callback ) {
     var xhr = new XMLHttpRequest(), message, 
-        post_data, url="https://api-ssl.bit.ly/v3/user/realtime_links";
+        post_data, url="https://api-ssl.bitly.com/v3/user/realtime_links";
     
     if(!oauth_key || oauth_key === "") { 
         postMessage({'error' : 'no auth key'})

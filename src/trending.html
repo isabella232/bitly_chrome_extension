@@ -3,7 +3,7 @@
 
 <!-- MIME TYPE Guidlines and references: http://hixie.ch/advocacy/xhtml -->
     <head>
-        <title>bit.ly Trending Bits</title>
+        <title>bitly Trending Bits</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="keywords" content="bit.ly" />
         <link rel="stylesheet" href="css/basic.css" type="text/css" charset="utf-8" />
@@ -18,12 +18,13 @@
              
              <div id="blueBanner">
                   <ul class="ext_nav_list">
+                      <!-- todo, add the JS version -->
                       <!-- <li><a class="openOptions" href="">Options</a></li> -->
                   </ul>
               </div>
               
               <div id="logo">
-                  <a href="options.html"><img src="s/graphics/bitly_logo.png" alt="" border="0"width="280px" height="47px"  /></a>
+                  <a href="options.html"> <img src="s/graphics/bitly-logo-blue_165_100.png" alt="" border="0" width="165px" height="100px"  /></a>
               </div>
               <!-- <div id="ext_top_nav">
                   <div id="ext_top_nav_inner">
@@ -67,8 +68,10 @@
         
         </div> <!-- end #container -->
         
+        <script type="text/javascript" src="js/bExt/bExt.js"></script>        
+        <script type="text/javascript" src="js/bExt/bExt.ui_banner.js"></script>        
+        
         <script type="text/javascript" src="js/libs/common.js"></script>
-        <script type="text/javascript" src="js/libs/backtweet.js"></script>
         <script type="text/javascript" src="js/libs/timeFormat.js"></script>
         <script type="text/javascript" src="js/libs/emile.js"></script>
         <script type="text/javascript" src="js/libs/fastFrag.js"></script>
@@ -99,7 +102,7 @@
             function watcher_callback( jo ) {
                 //console.log("money monkey", jo)
                 var links = jo && jo.expand_and_meta || {},
-                    link_trends = bg.localfetch("realtime")                
+                    link_trends = bExt.info.get("realtime");
                 
                 //console.log("link_trends in watcher_callback", link_trends, links)
                 bitly_trends.update_meta( links );
@@ -150,15 +153,14 @@
                 if(trends_internval) clearInterval(trends_internval);
                 //console.log("trend watching")
                 trends_internval = setInterval(function() {
-                    ///bg.get_realtime_metrics(  );
                     chrome.extension.sendRequest({'action' : 'realtime_metrics'}, trends_callback)
                 }, 10000)
             }
             
             var bg = chrome.extension.getBackgroundPage(),
-                realtimes_from_cache = bg.localfetch("realtime"),
+                realtimes_from_cache = bExt.info.get("realtime"),
                 trends_internval, current_trend_list = [],
-                user_data = bg.localfetch("user_data"),
+                user_data = bExt.info.get("user_data"),
                 link_trends = [];
             
             //console.log("link trends", link_trends)
@@ -177,7 +179,7 @@
                 
             } else {
                 // send them to login page...
-                bg.get_chrome_page("options.html")
+                bExt.open_page("options.html")
             }
             
 
@@ -196,7 +198,7 @@
 
 
 /*
-so I have this trends list, bg.localfetch("trends") || [];
+
 
 the fist item, is always the 'latest' item
 
@@ -213,7 +215,6 @@ I want to break up the display to show two things
                                         it's position since the last query, plus time elapse
                                         it's total change over time
                                 
-                                call backTweet("api_key").fetch() and get social info
                                 
                                 do an expand and meta call
 

@@ -8,7 +8,7 @@
 
 <!-- MIME TYPE Guidlines and references: http://hixie.ch/advocacy/xhtml -->
     <head>
-        <title>bit.ly Chrome Extension Metrics Summary</title>
+        <title>Analyze | bitly Extension</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="keywords" content="awesome" />
         <meta name="description" content="" />
@@ -31,7 +31,7 @@
                 </div>
                 
                 <div id="logo">
-                    <a href="options.html"><img src="s/graphics/bitly_logo.png" alt="" border="0"width="280px" height="47px"  /></a>
+                    <a href="options.html"> <img src="s/graphics/bitly-logo-blue_165_100.png" alt="" border="0" width="165px" height="100px"  /></a>
                 </div>
             </div> <!-- end #top -->
             
@@ -45,8 +45,33 @@
             
         </div> <!-- end #container -->
     
+<script type="text/javascript" charset="utf-8" src="js/bitly_oauth_credentials.js"></script>    
+<script type="text/javascript" charset="utf-8" src="js/bitlyapi-v3.0.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/libs/fastFrag.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/jquery-1.4.4.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/jquery-1.5.2.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="js/bExt/bExt.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/bExt/bExt.metrics.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+    bExt.init_api();
+    console.log(bExt.api);
+    bExt.metrics.init({
+        box : "#middle"
+    });
+    bExt.metrics.assemble();
+    
+    
+    //window.webkitRequestAnimationFrame(callback[, element]); // Chrome
+    
+    // if metrics inits it's own API
+    // it must be able to sign out
+    // listen for a sign out event...
+    
+</script>
+
+
 <script type="text/javascript" charset="utf-8">
     //user_clicks
     
@@ -60,7 +85,7 @@
                 $(document.body).addClass("page_loaded");
             });
             $('#middle').append( fastFrag.create(build_canvas(total_w,total_h) ) );
-            bg.bitly.user_clicks(30,function(jo) {
+            bg.bExt.api.user_clicks(30,function(jo) {
                 console.log(jo, "metrics for user");
                 var max_clicks=0;
                 for(var i=0; i<jo.clicks.length; i++) {
@@ -152,22 +177,13 @@
                                 href : "#"
                             }
                         }]
-                        // , {
-                        //                             type : "a",
-                        //                             css : "myClass",
-                        //                             content : "Weekly Overlay view",
-                        //                             attr : {
-                        //                                 href : "#"
-                        //                             }
-                        //                         }]
-
                     }
                 }]
             }
         }
         
         
-        init();
+        //init();
         
     })();
 </script>

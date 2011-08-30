@@ -1,11 +1,12 @@
 {
-  "name": "bit.ly | a simple URL shortener",
-  "version": "1.2.1.12",
+  "name": "bitly | a simple URL shortener",
+  "version": "1.2.1.27",
+  "minimum_chrome_version" : "10.0.0.0",
   "options_page": "options.html",
   "description": "Shorten, share, and track your links, right from your browser, instantly",
   "background_page": "background.html",
   "browser_action": {
-    "default_title": "bit.ly",  
+    "default_title": "bitly",  
     "default_icon": "bitly.png"
   },
   "icons" : { 
@@ -24,7 +25,7 @@
   "content_scripts": [
     {
      "matches": ["http://*/*", "https://*/*"],
-     "js": ["js/content_plugins/bitly.dispatcher.js"]   
+     "js": ["js/jquery-1.5.2.js", "js/content_plugins/bitly.dispatcher.js"]   
     }
   ]
 }

@@ -1,11 +1,13 @@
+
+
 var page_links, queried_matches = [],
     timeout_link, expander_visible = false, bit_container_elem, expanded_elements = [], get_more_links_timeout,
     //[-_a-zA-Z0-9][.\?!]?
-    fullUriRegex = new RegExp( "^((?:https?://){1}[a-zA-Z0-9]{0,3}\.{0,1}(?:[a-zA-Z0-9]{1,8}\.[a-z]{1,3}\\/[-_a-zA-Z0-9]{2,20}))(?:[.\?!]?)$", "gi"),
+    fullUriRegex = new RegExp( "^((?:https?://){1}[a-zA-Z0-9]{0,5}\.{0,1}(?:[a-zA-Z0-9]{1,9}\.[a-z]{1,3}\\/[-_a-zA-Z0-9]{2,20}))(?:[.\?!]?)$", "gi"),
     // keep this basic list, to eliminate already known items and save some cyles later
     false_positive_list = ["clp.ly", "seesmic.com", "wh.gov", "brizzly.com", "post.ly", "twitpic.com", 
                             "yfrog.com", "digg.com", "twitgoo.com", "ficly.com", "google.com", "paste.ly",
-                            "su.pr", "venmo.com", "blippy.com", "felttip.com", "github.com", "cnt.to",
+                            "su.pr", "venmo.com", "blippy.com", "felttip.com", "github.com", "cnt.to", "t.co",
                             "is.gd", "tinyurl.com", "twurl.nl", "twitter.com", "ow.ly", "mash.to"];
 
 
@@ -80,9 +82,10 @@ function findPos(obj) {
     return [curleft, curtop];
 }
 
-function brainResponse(jo) {    
+function brainResponse(jo) { 
     // start looking for more
-    run_find_more_links();
+    run_find_more_links(); 
+    
     
     var links =  document.getElementsByTagName("a"), 
         href, bit_key, user_hash, bit_result, 
@@ -95,15 +98,13 @@ function brainResponse(jo) {
         bit_container_elem.addEventListener('mouseover', function(e) {
             clearTimeout(timeout_link);
             expander_visible = true;
-            // hmmmmmmmmm
         });
         bit_container_elem.addEventListener('mouseout', closeBitlyUrlExpanderBox);
         bit_container_elem.addEventListener('click', function(e) {
             var clss = e.target.className, link_box = _id("always_for_this_domain"), params = {};
             if(e.target.parentNode === link_box) {
-                //bg.add_no_expand_domain( document.location.host );
                 e.preventDefault();                
-                params = {'action' : 'add_no_expand_domain_and_reload', 'domain_host' : document.location.host }
+                params = {'action' : 'add_prohibited_host', 'domain_host' : document.location.host }
                 chrome.extension.sendRequest(params, function(){} );                
                 return;
             }
@@ -124,7 +125,7 @@ function brainResponse(jo) {
             
             if(clss === "bitly_home_promo") {
                 e.preventDefault()
-                chrome.extension.sendRequest({'action' : 'open_options' }, open_options_callback );
+                chrome.extension.sendRequest({'action' : 'open_page', 'page_name' : 'options.html' }, function(){} );
             }
         });
         
@@ -140,8 +141,6 @@ function brainResponse(jo) {
     
     for(var i=0; i<matches_links.length; i++) {
        
-        //expanded_elements.push( matches_links[i].elem )
-        // get the relative position of this element so it's not always calculated
         (function( result, elem_num  ) {
             var html = '', el = matches_links[elem_num].elem, 
                 // positions = findPos( el ),
@@ -154,15 +153,16 @@ function brainResponse(jo) {
                     html += '<ul>';
                         html += '<li class="bit_user_clicks_box"><a type="bitly_hover_card" title="'+sUrl+'+ Page" href="'+ sUrl +'+">' + result.user_clicks + '</a></li>';
                         html += '<li>of</li>';
-                        html += '<li class="bit_global_clicks_box"><a type="bitly_hover_card" title="http://bit.ly/'+ result.global_hash +'+ Page" href="http://bit.ly/'+ result.global_hash +'+">' + result.global_clicks + "</a></li>";
+                        html += '<li class="bit_global_clicks_box"><a type="bitly_hover_card" title="http://bitly.com/'+ result.global_hash +'+ Page" href="http://bitly.com/'+ result.global_hash +'+">' + result.global_clicks + "</a></li>";
                     html += '</ul>';
                 html += '</div>';
                 html += '<div class="bitly_url_infobox">'
                     html += '<h3><a type="bitly_hover_card" title="'+lUrl +'" href="'+ sUrl +'">' + title + '</a></h3>'
                     html += '<p><a type="bitly_hover_card" href="'+ lUrl+'" class="bit_long_link_preview">'+ lUrl +'</a></p>'
+
                 html += '</div>'
                 html += '<a type="bitly_hover_card" title="Close" class="bitly_url_expander_box_close" href="#">X</a>';
-                html += '<a type="bitly_hover_card" title="bit.ly, a simple URL shortener" class="bitly_home_promo" href="#">bit.ly</a>';  
+                html += '<a type="bitly_hover_card" title="bitly" class="bitly_home_promo" href="#">bitly</a>';  
                 html += '<div style="display:none;" id="always_for_this_domain"><a href="">Hide for this domain.</a></div>'              
                 html += '<div class="bit_clearer"><hr /></div>'
             html += '</div>'
@@ -298,9 +298,7 @@ function callBrain( final_matches ) {
     
     return;
 }
-function open_options_callback() {
-    
-}
+
 
 
 function init() {
